@@ -1,0 +1,55 @@
+# Struct
+Structs in Solidity allows you to create more complicated data types that have multiple properties.
+- You can define your own type by creating a `struct`.
+
+- They are useful for grouping together related data.
+
+- Structs can be declared outside of a contract and imported in another contract.
+
+```jsx
+// SPDX-License-Identifier: MIT
+
+pragma solidity ^0.8.13;
+
+contract Books {
+    struct Book {
+      string name;
+      bool available;
+    }
+
+    // An array of 'Book' structs
+    Book[] public books;
+
+    function setBook(string calldata _name) public {
+        // 3 ways to initialize a struct
+        // - calling it like a function
+        books.push(Book(_name, true));
+        // key value mapping
+        books.push(Book({name: _name, available: true}));
+        // initialize an empty struct and then update it
+        Book memory book;
+        book.name = _name;
+        book.available = true;
+        books.push(book);
+    }
+
+    // Solidity automatically created a getter for 'books' so
+    // you don't actually need this function.
+    function getBook(uint _index) public view returns (string memory name, bool available) {
+        Book storage book = books[_index];
+        return (book.name, book.available);
+    }
+
+    // update name
+    function updateName(uint _index, string calldata _name) public {
+        Book storage book = books[_index];
+        book.name = _name;
+    }
+
+    // update available
+    function toggleAvailable(uint _index) public {
+        Book storage book = books[_index];
+        book.available = !book.available;
+    }
+}
+```

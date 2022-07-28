@@ -1,0 +1,30 @@
+# Importing Struct
+
+## Declaring
+This is saved on `'StructBook.sol'` file.
+```jes
+// SPDX-License-Identifier: MIT
+
+pragma solidity ^0.8.13;
+
+struct Book {
+    string name;
+    bool available;
+}
+```
+
+##  Importing
+
+
+```jes
+// SPDX-License-Identifier: MIT
+
+pragma solidity ^0.8.13;
+
+import "./StructBook.sol";
+
+contract Books {
+    // An array of 'Book' structs
+    Book[] public books;
+}
+```
