@@ -1,3 +1,65 @@
-import Callout from 'nextra-theme-docs/callout'
-
 # Data Locations - Storage, Memory and Calldata
+Each variable declared and used in a contract has a data location. It specifies where the value of that variable should be stored.
+
+## Storage
+The storage location is permanent data, which means that this data can be accessed into all functions within the contract. To make it more simple, you can think of it as the hard disk data of your computer where all the data gets stored permanently. Similarly, the storage variable is stored in the state of a smart contract and is persistent between function calls. Keep in mind that storage data location is expensive compared to other data locations.
+
+## Memory
+The memory location is temporary data and cheaper than the storage location. It can only be accessible within the function. Usually, Memory data is used to save temporary variables for calculation during function execution. Once the function gets executed, its contents are discarded. You can think of it as a RAM of each individual function.
+
+## Calldata
+Calldata is non-modifiable and non-persistent data location where all the passing values to the function are stored. Also, Calldata is the default location of parameters (not return parameters) of external functions.
+
+### Rules in data locations
+- State variables are always stored in the storage.
+
+```jes
+// SPDX-License-Identifier: MIT
+
+pragma solidity ^0.8.13;
+
+contract DataLocation {
+   //storage     
+   uint stateVariable;  
+   uint[] stateArray;  
+}
+```
+- You can not explicitly override the location of state variables.
+
+```jes highlight=7,8
+// SPDX-License-Identifier: MIT
+
+pragma solidity ^0.8.13;
+
+contract DataLocation {
+        
+   uint storage stateVariable; // error  
+   uint[] memory stateArray; // error   
+}
+```
+
+- Local variables with a value type are stored in the memory. However, for a reference type, you need to specify the data location explicitly.
+
+```jsx
+// SPDX-License-Identifier: MIT
+
+pragma solidity ^0.8.13;
+
+contract DataLocation {
+        
+   function sampleFunction() {
+
+        //value types  
+        //so they are stored in the memory  
+        bool flag2;  
+        uint number2;  
+        address account2;  
+            
+        //reference type  
+        uint[] memory localArray;
+   }   
+}
+```
+
+- Function parameters (not including returns parameters) of external function are stored in the Calldata.
+- Assignment to storage state variable from a memory variable always creates a new copy.
