@@ -1,0 +1,20 @@
+{
+  "state-variables": "State variables",
+  "structs": "Structs",
+  "data-locations": "Data Locations - Storage, Memory and Calldata",
+  "inheritance": "Inheritance",
+  "inherited-state-variables": "Inherited State Variables",
+  "calling-parent-contracts": "Calling Parent Contracts",
+  "visibility": "Visibility(public, private, internal, external)",
+  "interface": "Interface",
+  "fallback": "Fallback",
+  "call": "Call",
+  "delegate-call": "DelegateCall",
+  "function-selector": "Function Selector",
+  "calling-other-contract": "Calling Other Contract",
+  "library": "Library",
+  "hashing-with-keccak256": "Hashing with Keccak256",
+  "assembly": "Assembly",
+  "upgradeable-proxy": "Upgradeable Proxy",
+  "write-to-any-slot": "Write to Any Slot"
+}
