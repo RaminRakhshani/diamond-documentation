@@ -1,12 +1,12 @@
 export default {
-  github: 'https://github.com/shuding/nextra',
+  github: 'https://github.com/raminrakhshani/diamond-documentation',
   docsRepositoryBase: 'https://github.com/shuding/nextra/blob/master',
   titleSuffix: ' – Diamond',
   logo: (
     <>
-      <span className="mr-2 font-extrabold hidden md:inline">Nextra</span>
+      <span className="mr-2 font-extrabold hidden md:inline">EIP2535 Diamonds</span>
       <span className="text-gray-600 font-normal hidden md:inline">
-        The Next.js Static Site Generator
+      - Tutorial
       </span>
     </>
   ),
