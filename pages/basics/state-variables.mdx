@@ -1,3 +1,25 @@
-import Callout from 'nextra-theme-docs/callout'
+# State variables in Solidity
 
-# State variables
+- State variables are permanent and stored on the blockchain in contract storage.
+- Declared outside of a function and stored on the blockchain
+- Stored on the blockchain in the order of declaration    
+
+```jsx
+// SPDX-License-Identifier: MIT
+pragma solidity ^0.8.13;
+
+contract Variables {
+    // State variables will be saved on the blockchain.
+    string public tokenName = "TokenName";
+    uint public counter = 1;
+
+    function sampleFunction() public {
+        // Local variables are not saved on the blockchain.
+        uint i = 1;
+
+        // Here are some global variables
+        uint timestamp = block.timestamp; // Current block timestamp
+        address sender = msg.sender; // address of the caller
+    }
+}
+```
