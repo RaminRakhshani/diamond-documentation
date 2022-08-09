@@ -1,3 +1,13 @@
 import Callout from 'nextra-theme-docs/callout'
 
 # Eternal Storage
+Using Solidity mappings to create an API for contract storage. A proxy contract and facets can use the same Eternal Storage API to create and use whatever storage variables are needed without conflict.
+
+## Downsides
+1. The state variable syntax and organization of Eternal Storage is clumsy. It is full of `getInt`, `setInt`, `getString`, `setString` type of functions.
+
+2. It works directly for simple values and arrays but it does not work in a simple, generic way for mappings and structs.
+
+3. A proxy contract and all of its facets must use the same storage API.
+
+4. Not easy to see at a glance what state variables exist because they are not declared together anywhere

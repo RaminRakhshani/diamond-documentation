@@ -7,8 +7,6 @@
   "calling-parent-contracts": "Calling Parent Contracts",
   "visibility": "Visibility(public, private, internal, external)",
   "interface": "Interface",
-  "fallback": "Fallback",
-  "call": "Call",
   "delegate-call": "DelegateCall",
   "function-selector": "Function Selector",
   "calling-other-contract": "Calling Other Contract",

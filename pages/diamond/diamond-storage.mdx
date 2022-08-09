@@ -1,3 +1,58 @@
 import Callout from 'nextra-theme-docs/callout'
 
 # Diamond Storage
+
+Here is the Diamond Storage pattern:
+
+Create a contract. This is a Diamond Storage contract but let’s call it “storage contract” because that is shorter.
+Create a struct in the storage contract that contains the state variables you care about.
+Choose a position in storage to read and write your struct.
+Write a function in the storage contract that creates a storage pointer for the struct and returns it.
+Any contract/proxy/facet that needs to read/write the state variables defined in the storage contract just needs to inherit the storage contract and call the function that returns the storage pointer.
+Here is a simple, made up example of a contract that uses Diamond Storage:
+
+```jsx
+// SPDX-License-Identifier: MIT
+
+pragma solidity ^0.8.13;
+
+contract MyStorageContract {
+// The state variables we care about.
+  struct MyStorage {
+    uint aVar;
+    bytes myBytes;
+    mapping(uint => bytes32) myMap;
+  } 
+  // Creates and returns the storage pointer to the struct.
+  function myStorage() internal pure returns(MyStorage storage ms) {
+    // ms_slot = keccak256("com.mycompany.my.storage")
+    assembly {ms_slot := 0xabcd55b489adb030b...d09c4154cf0}
+  }
+}
+```
+
+If you want to see a real example check out the reference implementation of the diamond standard which was recently updated to use Diamond Storage. Specifically look at LibDiamond.sol.
+
+Here is an example of code that uses the above MyStorageContract:
+
+```jsx
+// SPDX-License-Identifier: MIT
+
+pragma solidity ^0.8.13;
+
+contract MyContract is MyStorageContract {
+ function doSomething(uint selector, bytes32 myData) external {
+   MyStorage storage ms = myStorage();
+   ms.myMap[selector] = myData;
+   ms.aVar = uint(myData);
+   //... more code;
+ }
+ 
+function returnMyData(uint selector) external view returns(bytes32){
+   MyStorage storage ms = myStorage();
+   bytes32 data = ms.myMap[selector];
+   //... more code
+   return data;
+ }
+}
+```

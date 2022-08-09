@@ -1,3 +1,9 @@
 import Callout from 'nextra-theme-docs/callout'
 
 # Unstructured Storage
+Solidity’s storage layout can be bypassed with assembly allowing a programmer to set and store values at arbitrary positions in contract storage. This is the Unstructured Storage pattern.
+
+## Downsides
+1. A getter and setter function needs to be defined and used for each storage variable.
+
+2. This works for simple values. It does not work for structs or mappings.

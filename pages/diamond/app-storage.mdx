@@ -1,3 +1,83 @@
 import Callout from 'nextra-theme-docs/callout'
 
 # App Storage
+
+I have written about the diamond storage pattern for organizing contract state variables in proxy contracts and diamonds.
+
+As a quick refresher, a state variable or storage layout organizational pattern is needed when writing proxy contracts or diamonds in Solidity because Solidity's builtin storage layout system doesn't work for them.
+
+Diamond storage is particularly good for isolating or compartmenting state variables to specific facets or functionality. This is great for creating modular facets that can be understood as their own units and be added to diamonds. A diamond with a lot of functionality is well organized and understandable if each of its facets can be understood in isolation. Diamond storage helps make that possible.
+
+However, I have found that when building applications with diamonds I often want to share state variables specific to my application with facets that are specific to my application. It gets tedious to call a `diamondStorage()` function in every function that I want to access state variables.
+
+I have successfully utilized a new pattern in contracts called `AppStorage`. It is a nicer and more convenient way to access application specific state variables that are shared among facets.
+
+The pattern works in the following way:
+
+1) Define a struct called AppStorage that contains all the state variables specific to your application and that you plan to share with different facets. Store AppStorage in a file. Any of your facets can now import this file to access the state variables.
+
+```jsx
+// SPDX-License-Identifier: MIT
+
+pragma solidity ^0.8.13;
+
+// AppStorage.sol
+struct AppStorage {
+  uint256 secondVar;
+  uint256 firstVar;
+  uint256 lastVar;
+  ...
+}
+```
+
+2) In a facet that imports the AppStorage struct declare an AppStorage state variable called `s`. 
+This should be the only state variable declared in the facet. Here's an example:
+
+```jsx
+// SPDX-License-Identifier: MIT
+
+pragma solidity ^0.8.13;
+
+import "./AppStorage.sol"
+
+contract StakingFacet {
+  AppStorage internal s;
+  ...
+}
+```
+This is a very nice convention because it makes state variables concise, easy to access, and it distinguishes state variables from local variables and prevents name clashes/shadowing with local variables and function names. It helps identify and make explicit state variables in a convenient and concise way. It is also a little more gas efficient than diamond storage access.
+Since `AppStorage s` is the first and only state variable declared in facets its position in contract storage is `0`. This fact can be used to access AppStorage in Solidity libraries using diamond storage access. Here's an example of that:
+
+```jsx
+// SPDX-License-Identifier: MIT
+
+pragma solidity ^0.8.13;
+
+library MyLib {
+  function diamondStorage() 
+    internal 
+    pure 
+    returns (DiamondStorage storage ds) 
+  {    
+    assembly {
+      ds.slot := 0
+    }
+  }
+
+  function someFunction() internal {
+    AppStorage storage s = diamondStorage();
+    ... do stuff
+  }
+}
+```
+`AppStorage s` can be declared as the one and only state variable in facets or it can be declared in a contract that facets inherit.
+AppStorage won't work if state variables are declared outside of AppStorage and outside of Diamond Storage. It is a common error for a facet to inherit a contract that declares state variables outside AppStorage and Diamond Storage. This causes a misalignment of state variables.
+
+One downside is that state variables can't be declared public in structs so getter functions can't automatically be created this way. But I think it is better anyway to make your own getter functions for state variables because its more explicit.
+
+The [GHSTStakingDiamond](https://github.com/aavegotchi/ghst-staking) is a good example of a diamond that uses the AppStorage pattern.
+
+For a large, in production, successful example of using the AppStorage pattern, checkout the Aavegotchi diamond. The `AppStorage` struct is defined in this file:
+[LibAppStorage](https://github.com/aavegotchi/aavegotchi-contracts/blob/master/contracts/Aavegotchi/libraries/LibAppStorage.sol).
+
+Notice that the `AppStorage` struct utilizes other structs in arrays and mappings.
