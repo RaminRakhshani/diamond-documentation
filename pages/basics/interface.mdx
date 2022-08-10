@@ -1,3 +1,24 @@
 import Callout from 'nextra-theme-docs/callout'
 
 # Interface
+You can interact with other contracts by declaring an Interface.
+
+- Interface can not have any function with implementation.
+- Interface can not inherit from other contracts, but they can inherit from other interfaces.
+- Functions of an interface can be only of type external.
+- Interface can not have constructor.
+- Interface can not have state variables.
+- Interface can have enum, structs which can be accessed using interface name dot notation.
+For example a contract that uses the sample interface below can access Iauto.carType and Iauto.vehicle.
+
+```jsx
+// SPDX-License-Identifier: MIT
+
+pragma solidity ^0.8.13;
+
+interface Iauto {
+    enum carType { gas, electric}
+    struct vehicle { string car; string truck; }
+    function transfer(address recipient, uint amount) external;
+}
+```
