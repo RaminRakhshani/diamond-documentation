@@ -1,3 +1,22 @@
 import Callout from 'nextra-theme-docs/callout'
 
 # Visibility(public, private, internal, external)
+In Solidity, you can control who has access to the functions and state variables in your contract and how they interact with them.
+
+## Function Visibility :
+`public` `internal` `private` `external`
+## State variables Visibility:
+`public` `internal` `private`
+
+## `public`
+Can be accessed by all parties within and outside the contract. When the visibility is not specified, the default visibility of a function is `public`.
+
+## `internal`
+Are only accessible within the contract in which they were declared, although they can be accessed from derived contracts. When visibility is not specified, state variables have the default value of `internal`.
+
+## `private`
+Are only accessible within the contract in which they were declared. Private functions are also the only functions that cannot be inherited by other functions.
+
+## `external`
+External functions can only be called from outside the contract in which they were declared.
+State variables can not be declared as `external`.
