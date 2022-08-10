@@ -1,3 +1,56 @@
 import Callout from 'nextra-theme-docs/callout'
 
 # Function Selector
+- When a function is called, the first 4 bytes of calldata specifies which function to call.
+- It is the first (left, high-order in big-endian) four bytes of the Keccak-256 hash of the signature of the function.
+- The function name with the parenthesised list of parameter types. Parameter types are split by a single comma, no spaces are used.
+
+A call to the function `f` with parameters `a_1, ..., a_n` is encoded as
+
+```jsx
+function_selector(f) enc((a_1, ..., a_n))
+```
+and return values `v_1, ..., v_k` of `f` are encoded as
+```jsx
+enc((v_1, ..., v_k))
+```
+
+# Example1
+
+```jsx
+// SPDX-License-Identifier: MIT
+
+pragma solidity ^0.8.13;
+
+contract Foo {
+  function bar(bytes3[2]) public pure {}
+  function baz(uint32 x, bool y) public pure returns (bool r) { r = x > 32 || y; }
+  function sam(bytes, bool, uint[]) public pure {}
+}
+```
+Calling `baz` with the parameters `69` and `true`. we would pass 68 bytes total.
+```jsx
+0xcdcd77c000000000000000000000000000000000000000000000000000000000000000450000000000000000000000000000000000000000000000000000000000000001
+```
+which can be broken down into:
+- The method ID: `0xcdcd77c0`. This is derived as the first 4 bytes of the Keccak hash of the ASCII form of the signature `baz(uint32,bool)`
+```jsx
+bytes4(keccak256(bytes("baz(uint32,bool)")))
+```
+- The first parameter, a `uint32` value `69` padded to 32 bytes
+```jsx
+0x0000000000000000000000000000000000000000000000000000000000000045
+```
+- The second parameter - boolean `true`, padded to 32 bytes
+
+```jsx
+0x0000000000000000000000000000000000000000000000000000000000000001
+```
+
+## Examples
+- The method ID or function selector of `transfer(address,uint256)` is `0xa9059cbb`.
+- The method ID or function selector of `transferFrom(address,address,uint256)` is `0x23b872dd`.
+- The method ID or function selector of `totalSupply()` is `0x18160ddd`.
+- The method ID or function selector of `balanceOf(address)` is `0x70a08231`.
+
+## [Try it you'r self](https://remix-ide.readthedocs.io/en/latest/tutorial_debug.html)
