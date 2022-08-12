@@ -14,5 +14,6 @@
   "hashing-with-keccak256": "Hashing with Keccak256",
   "assembly": "Assembly",
   "upgradeable-proxy": "Upgradeable Proxy",
-  "write-to-any-slot": "Write to Any Slot"
+  "write-to-any-slot": "Write to Any Slot",
+  "fallback": "Fallback"
 }
